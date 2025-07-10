@@ -1,10 +1,9 @@
-version: "3.8"
 
 services:
   catalog-service:
     depends_on:
       - polar-postgres
-    image: "catalog-service" # The image used to run the container
+    image: ghcr.io/yimengl/catalog-service # The image used to run the container
     container_name: "catalog-service"
     ports:
       - 9001:9001
@@ -18,7 +17,7 @@ services:
       - SPRING_PROFILES_ACTIVE=testdata
 
   config-service:
-    image: "config-service"
+    image: ghcr.io/yimengl/config-service
     container_name: "config-service"
     ports:
       - 8888:8888
