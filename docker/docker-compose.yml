@@ -27,6 +27,22 @@ services:
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=9888
 
+  order-service:
+    depends_on:
+      - polar-postgres
+    image: ghcr.io/yimengl/order-service
+    container_name: "order-service"
+    ports:
+      - 9002:9002
+      - 8002:8002 # The port where the JVM will listen for debug connections
+    environment:
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=8002
+      - POLAR_CATALOG_SERVICE_URI=http://catalog-service:9001 # The URL of the catalog service
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888 # The URL of the config server
+      - SPRING_R2DBC_URL=r2dbc:postgresql://polar-postgres:5432/polardb_order # The URL of the PostgreSQL database for R2DBC
+      - SPRING_FLYWAY_URL=jdbc:postgresql://polar-postgres:5432/polardb_order # The URL of the PostgreSQL database for Flyway migrations
+
   polar-postgres:
     image: "postgres:14.4"
     container_name: "polar-postgres"
